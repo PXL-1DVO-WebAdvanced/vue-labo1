@@ -57,3 +57,14 @@ Gebruik onderstaande template om de filter te implementeren. Definieer een varia
 - Toon het fieldset-element met id *comparison* enkel wanneer er reeds producten in *comparedProducts*-lijst aanwezig zijn! 
 - Zorg ervoor dat wanneer de gebruiker op het *trash*-icoontje klikt het betreffende product uit de vergelijking wordt gehaald. Hiervoor moet dus de *compare*-eigenschap van het product op *false* worden gezet. Gebruik hiervoor een event emit *removeFromComparison* die het product-id als argument voorziet.
 
+## Screenshots
+
+#### Login
+![login](assets/login_error.png)
+![login](assets/login_wachtwoord.png)
+
+#### Productlist
+![products](assets/product_list.png)
+
+#### Filter & Vergelijking
+![functionality](assets/filter_and_comparison.png)
