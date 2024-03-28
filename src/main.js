@@ -6,4 +6,4 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 const labo = createApp(App)
-labo.mount('#app')
+// labo.mount('#app')
