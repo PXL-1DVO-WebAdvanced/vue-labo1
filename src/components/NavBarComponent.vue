@@ -18,14 +18,26 @@
         </li>
       </ul>
       <span class="navbar-text">
-        <button type="button" class="btn btn-light"></button>
+        <button type="button" class="btn btn-light" @click="logout()">{{ username }}</button>
       </span>
     </div>
   </div>
 </nav>
 </template>
 <script>
-
+export default {
+    props: [
+        'username'
+    ],
+    emits: [
+        'userLogout'
+    ],
+    methods: {
+        logout() {
+            this.$emit('userLogout')
+        }
+    }
+}
 </script>
 <style lang="scss">
     

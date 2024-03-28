@@ -1,17 +1,28 @@
 <template>
   <div>
-    <login />
+    <login v-if="!username" @userLogin="onUserLogin"/>
+    <div id="main" v-else>
+      <nav-bar :username="username" @userLogout="onUserLogout"/>
 
-    <div id="main">
-      <!-- TODO: insert NavBarComponent here! -->
       <div class="main-content container-fluid">
         <div class="row">
           <div class="col-4">
-            <!-- TODO: insert filter-form here! -->
-            <!-- TODO: insert ComparisonListComponent here!  -->
+            <form>
+              <fieldset>
+                <caption>Filter</caption>
+                <input type="text" class="form-control" v-model="searchText" placeholder="Zoek op titel">
+              </fieldset>
+            </form>
+            <comparison-list 
+              :products="comparedProducts"
+              @removeFromComparison="removeProductFromComparison" />
           </div>
           <div class="col-8 product-list">
-            <!-- TODO: insert ProductCardComponent here! -->
+            <product-card
+              v-for="product in filteredProducts"
+              :key="product.id"
+              :product="product"
+              @changeCompare="changeProductCompare" />
           </div>
         </div>
       </div>
@@ -21,22 +32,61 @@
 
 <script>
 import Login from './components/LoginComponent.vue';
-
-// Onderstaande module wordt gebruik om random productnamen te genereren:
+import NavBar from './components/NavBarComponent.vue';
+import ProductCard from './components/ProductCardComponent.vue'; 
+import ComparisonList from './components/ComparisonListComponent.vue';
 import { uniqueNamesGenerator, animals } from 'unique-names-generator';
 
 
 export default {
   components: { 
-    Login
+    Login,
+    NavBar,
+    ProductCard,
+    ComparisonList
+  },
+  computed: {
+    comparedProducts() {
+      return this.products.filter(p => p.compare == true)
+    },
+    filteredProducts() {
+      if(this.searchText)
+          return this.products.filter(product =>
+          product.title.toLowerCase().includes(this.searchText.toLowerCase()));
+      else
+          return this.products;
+    }
   },
   data() {
     return {
       username: null,
-      products: this.getSomeProducts()
+      products: this.getSomeProducts(),
+      searchText: ''
     }
   },
   methods: {
+    onUserLogin(username) {
+      this.username = username;
+    },
+    onUserLogout() {
+      this.username = null;
+    },
+    changeProductCompare(object) {
+      console.log(`changeProductCompare(${object.compare})`)
+      let product = this.products.find(p => p.id === object.id)
+
+      if(product) {
+        product.compare = object.compare;
+      }
+    },
+    removeProductFromComparison(productId) {
+      console.log(`removeProductFromComparison(${productId})`)
+      let product = this.products.find(p => p.id === productId)
+      console.log(product)
+      if(product) {
+        product.compare = false;
+      }
+    },
     getSomeProducts() {
       return [
           {
@@ -140,6 +190,9 @@ export default {
 }
 </script>
 <style lang="scss">
+  .username {
+    text-align: right !important;
+  }
   .product-list {
     padding: 1rem;
     display: flex;
@@ -153,6 +206,19 @@ export default {
     caption {
       font-weight: bold;
       width: 50%;
+    }
+  }
+  .product-comparison {
+    padding: 1rem;
+    li {
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid lightgray;
+      i {
+        font-size: 1.5rem;
+        margin-right: 2rem;
+      }
     }
   }
 </style>

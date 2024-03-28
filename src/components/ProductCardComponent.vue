@@ -2,14 +2,14 @@
     <div class="card product-card">
       <img src="../assets/notfound.jpg"/>
       <div class="card-body">
-        <h5 class="card-title">...</h5>
-        <p class="card-text">...</p>
+        <h5 class="card-title">{{ product.title }}</h5>
+        <p class="card-text">{{ product.description }}</p>
       </div>
       <div class="card-body ">
-        <p class="price">€ ...</p>
+        <p class="price">€ {{ product.price }}</p>
         <div class="d-flex align-items-center">
-          <input type="checkbox" />
-          <label>Vergelijk</label>
+          <input :id="product.id" type="checkbox" v-model="product.compare" @change.stop.prevent="changeComparison" />
+          <label :for="product.id">Vergelijk</label>
         </div>
       </div>
     </div>
@@ -17,7 +17,18 @@
   
   <script>
   export default {
-    
+    props: [
+      'product'
+    ],
+    emits: [
+      'changeCompare'
+    ],
+    methods: {
+        changeComparison(event) {
+            console.log(event.target.checked)
+            this.$emit('changeCompare', {id: this.product.id, compare: event.target.checked})
+        }
+    }
   };
 </script>
   
